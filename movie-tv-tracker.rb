@@ -2,7 +2,6 @@ require 'sqlite3'
 
 # create sqlite3 db
 db = SQLite3::Database.new("movie_tv_ratings.db")
-# db.results_as_hash = true # format the databse structures as hashes
 
 create_reviews_table = <<-SQL
   CREATE TABLE IF NOT EXISTS reviews(
@@ -33,20 +32,12 @@ create_genres_table = <<-SQL
   );
 SQL
 
+# create the db tables
 db.execute(create_reviews_table)
 db.execute(create_types_table)
 db.execute(create_genres_table)
 
-# db.execute("INSERT INTO types (type) VALUES ('Movie')")
-# db.execute("INSERT INTO types (type) VALUES ('TV Show')")
-# db.execute("INSERT INTO genres (genre) VALUES ('Action')")
-# db.execute("INSERT INTO genres (genre) VALUES ('Comedy')")
-# db.execute("INSERT INTO genres (genre) VALUES ('Drama')")
-# db.execute("INSERT INTO genres (genre) VALUES ('Musical')")
-# db.execute("INSERT INTO genres (genre) VALUES ('Sci-Fi')")
-# db.execute("INSERT INTO genres (genre) VALUES ('Fantasy')")
-# db.execute("INSERT INTO genres (genre) VALUES ('Documentary')")
-# db.execute("INSERT INTO genres (genre) VALUES ('Family')")
+# method prints ". . ." one by one to simulate thinking
 def print_slowly
   dots = [".",".","."]
   dots.each {|i| print i; sleep 0.20}
