@@ -47,6 +47,11 @@ db.execute(create_genres_table)
 # db.execute("INSERT INTO genres (genre) VALUES ('Fantasy')")
 # db.execute("INSERT INTO genres (genre) VALUES ('Documentary')")
 # db.execute("INSERT INTO genres (genre) VALUES ('Family')")
+def print_slowly
+  dots = [".",".","."]
+  dots.each {|i| print i; sleep 0.20}
+  puts "\n"
+end
 
 def add_item(db)
   puts "What is the name of the movie/show?"
@@ -60,6 +65,7 @@ def add_item(db)
   puts "What genre? Type the corresponding number. Action(1), Comedy(2), Drama(3), Musical(4), Sci-fi(5), Fantasy(6), Documentary(7), Family(8)"
   genre = gets.chomp 
   db.execute("INSERT INTO reviews (title, stars, comment, type_id, genre_id) VALUES (?, ?, ?, ?, ?)", [title, stars, comment, type, genre])
+  print_slowly
   puts "CONFIRMATION: Item has been added to the list!"
 end
 
@@ -67,6 +73,7 @@ def view_list(db)
   puts "Would you like to..."
   puts "View MOVIES you've rated (type '1'), TV SHOWS you've rated (type '2'), or BOTH (type '3')?"
   list_type = gets.chomp
+  print_slowly
   if list_type == "3"
     entries = db.execute("SELECT * FROM reviews")
     puts "***** MOVIES AND TV SHOWS YOU'VE RATED *****"
@@ -89,21 +96,36 @@ def view_list(db)
   puts "\n \n"
 end
 
+def search_list(db)
+  puts "Search for movie/show title:"
+  search_title = gets.chomp
+  print_slowly
+  title = db.execute("SELECT * FROM reviews WHERE title='#{search_title}'")
+  title.each do |item|
+    puts "•"+item[1].upcase + " | " + item[2].to_s + " stars" + " | " + item[3]
+  end
+end
+
 # Driver code
 puts "~~~ MOVIE AND TV TRACKER ~~~"
 done = false
 until done == true
-  puts "Would you like to..."
+  puts "WOULD YOU LIKE TO:"
   puts "1. View the current list (type '1')"
   puts "2. Add a movie or TV show to the list (type '2')"
-  puts "3. Exit the program (type '3')"
+  puts "3. Search for a movie (type '3')"
+  puts "4. Exit the program (type '4')"
   action = gets.chomp
-
   if action == "2"
-   add_item(db)
+    print_slowly
+    add_item(db)
   elsif action == "1"
+    print_slowly
     view_list(db)
   elsif action == "3"
+    print_slowly
+    search_list(db)
+  elsif action == "4"
     done = true
   end
 end
