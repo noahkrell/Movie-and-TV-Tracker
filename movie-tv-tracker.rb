@@ -97,6 +97,17 @@ def search_list(db)
   end
 end
 
+def recommend(db)
+  puts "What genre are you in the mood for? Type the corresponding number. Action(1), Comedy(2), Drama(3), Musical(4), Sci-fi(5), Fantasy(6), Documentary(7), Family(8)"
+  recommend_genre = gets.chomp
+  puts "Do you want to watch a movie (1) or TV show (2)?"
+  recommend_type = gets.chomp
+  puts "Generating recommendation" 
+  all_recommendations = db.execute("SELECT title, stars FROM reviews WHERE genre_id='#{recommend_genre}' AND type_id='#{recommend_type}';")
+  recommendation = all_recommendations.sample
+  puts "Try #{recommendation[0].upcase}! You gave it #{recommendation[1]} stars."
+end
+
 # Driver code
 puts "~~~ MOVIE AND TV TRACKER ~~~"
 done = false
@@ -105,7 +116,8 @@ until done == true
   puts "1. View the current list (type '1')"
   puts "2. Add a movie or TV show to the list (type '2')"
   puts "3. Search for a movie (type '3')"
-  puts "4. Exit the program (type '4')"
+  puts "4. Get a movie / show recommendation (type '4')"
+  puts "5. Exit the program (type '5')"
   action = gets.chomp
   if action == "2"
     print_slowly
@@ -117,6 +129,9 @@ until done == true
     print_slowly
     search_list(db)
   elsif action == "4"
+    print_slowly
+    recommend(db)
+  elsif action == "5"
     done = true
   end
 end
